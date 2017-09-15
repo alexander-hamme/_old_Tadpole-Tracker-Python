@@ -8,5 +8,5 @@ Developing a program with OpenCV, Python, and C++ that tracks and records data o
 
 
 
-###### ![Sample output file](https://github.com/alexander-hamme/Computer_Vision_Xenopus_Tadpole_Tracker/blob/master/data.csv)
+###### ![Sample output file](https://github.com/alexander-hamme/Computer_Vision_Xenopus_Tadpole_Tracker/blob/master/data.csv) (Note that acceleration calculations have not yet been implemented)
 
