@@ -1,4 +1,6 @@
 # computer-vision-xenopus-tadpole-tracker
 Developing a program with OpenCV, Python, and C++ that tracks and records data of Xenopus laevis tadpoles. This project is in collaboration with neuroscience researchers at Bard College.
 
-Feel free to watch the proof of concept video.
+Feel free to watch the proof of concept video:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tt-ltoL9iEI" frameborder="0" allowfullscreen></iframe>
