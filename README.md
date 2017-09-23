@@ -1,5 +1,5 @@
 # computer-vision-xenopus-tadpole-tracker
-Program with OpenCV (Python and C++) that tracks and records data of Xenopus laevis tadpoles. Using Tensorflow to train neural network for tadpole image classifier and construct decision trees / kNN to improve trajectory prediction. 
+Program with OpenCV (Python and C++) that tracks and records data of *Xenopus laevis* tadpoles. Using Tensorflow to train neural network for tadpole image classifier and construct decision trees / kNN to improve trajectory prediction. 
 
 Project is in collaboration with neuroscience researchers at Bard College.
 
