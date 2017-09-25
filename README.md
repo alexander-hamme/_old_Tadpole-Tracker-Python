@@ -1,5 +1,5 @@
 # computer-vision-xenopus-tadpole-tracker
-Research project using OpenCV (Python / C++) and Tensorflow. Tracks and records data of many *Xenopus laevis* tadpoles at once. 
+Research project using OpenCV (Python / C++) and Tensorflow that tracks and records movement data of many *Xenopus laevis* tadpoles in real time. 
 
 There are two major components of this tracker program: **Detection** and **Tracking**.
   * detection is the process of finding regions of interest (ROI) in each frame (image) from the video input stream
@@ -7,11 +7,11 @@ There are two major components of this tracker program: **Detection** and **Trac
     i.e. connecting the ROIs to individual tadpoles. This becomes complicated when tracking multiple animals, because collisions and collusions become possible. Therefore, trajectory prediction and other algorithms need to be implemented.
 
 
-Detection: The best approach is to use a convolutional neural network. This program will implement the Faster R-CNN algorithm,  retrained for detection of Xenopus tadpoles. 
+Detection: I will use a convolutional neural network. This program will implement the Faster R-CNN algorithm,  retrained for detection of Xenopus tadpoles. 
 
-Tracking (trajectory prediction specifically): The best approach to this challenge is to train a sequential neural network on recorded tadpole movement data. 
+Tracking (trajectory prediction specifically): I will train a sequential neural network on recorded tadpole movement data. 
 
-Project is in collaboration with neuroscience researchers at Bard College.
+Project is in collaboration with neuroscience department at Bard College (xenopus tadpoles are used for neurobiological research).
 
 ###### Proof of Concept gif:
 
