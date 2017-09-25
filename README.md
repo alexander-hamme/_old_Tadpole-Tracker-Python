@@ -11,7 +11,7 @@ Detection: I will use a convolutional neural network. This program will implemen
 
 Tracking (trajectory prediction specifically): I will train a sequential neural network on recorded tadpole movement data. 
 
-Project is in collaboration with neuroscience department at Bard College (xenopus tadpoles are used for neurobiological research).
+Project is in collaboration with neuroscience department at Bard College (*xenopus laevis* used for neurobiological research).
 
 ###### Proof of Concept gif:
 
