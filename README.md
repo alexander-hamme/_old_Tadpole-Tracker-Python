@@ -1,9 +1,15 @@
 # computer-vision-xenopus-tadpole-tracker
-Program with OpenCV (Python / C++) and Tensorflow that tracks and records data of *Xenopus laevis* tadpoles. 
+Program with OpenCV (Python / C++) and Tensorflow that tracks and records data of multiple *Xenopus laevis* tadpoles at once. 
 
-Will use Faster R-CNN algorithm with retrained neural network image classifier for tadpole detection. 
+There are two major components of this tracker program: **Detection** and **Tracking**.
+  * detection is the process of finding regions of interest (ROI) in each frame (image) from the video input stream
+  * tracking is the process of connecting where each animal was in previous frames to each sequential frame; 
+    i.e. connecting the ROIs to individual tadpoles. This becomes complicated when tracking multiple animals, because collisions and collusions become possible. Therefore, trajectory prediction and other algorithms need to be implemented.
 
-In addition to detection, tracking is the other major challenge to be solved- will construct decision tree classifiers / kNN / similar machine learning algorithms for trajectory prediction and correction. 
+
+Detection: The best approach is to use a convolutional neural network. This program will implement the Faster R-CNN algorithm,  retrained for detection of Xenopus tadpoles. 
+
+Tracking (trajectory prediction specifically): The best approach to this challenge is to train a sequential neural network on recorded tadpole movement data. 
 
 Project is in collaboration with neuroscience researchers at Bard College.
 
@@ -14,7 +20,7 @@ Project is in collaboration with neuroscience researchers at Bard College.
 
 
 
-###### ![Sample output file](https://github.com/alexander-hamme/Computer_Vision_Xenopus_Tadpole_Tracker/blob/master/data.csv) (Note that acceleration calculations have not yet been incorporated into final data file)
+###### ![Sample output file](https://github.com/alexander-hamme/Computer_Vision_Xenopus_Tadpole_Tracker/blob/master/data.csv) (Side note, acceleration calculations are not yet incorporated into final data file)
 
 
 ###### More files will be added soon.
