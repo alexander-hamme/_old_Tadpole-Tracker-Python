@@ -20,7 +20,7 @@ Project is in collaboration with neuroscience department at Bard College (*Xenop
 
 
 
-###### ![Sample output file](https://github.com/alexander-hamme/Computer_Vision_Xenopus_Tadpole_Tracker/blob/master/data.csv) (Side note, acceleration calculations are not yet incorporated into final data file)
+###### ![Sample output file](https://github.com/alexander-hamme/Computer_Vision_Xenopus_Tadpole_Tracker/blob/master/data.csv) (side note, acceleration calculations are not yet incorporated into final data file)
 
 
 ###### More files will be added soon.
