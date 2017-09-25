@@ -3,8 +3,8 @@ Research project using OpenCV (Python / C++) and Tensorflow that tracks and reco
 
 There are two major components of this tracker program: **Detection** and **Tracking**.
   * detection is the process of finding regions of interest (ROI) in each frame (image) from the video input stream
-  * tracking is the process of connecting where each animal was in previous frames to each sequential frame; 
-    i.e. connecting the ROIs to individual tadpoles. This becomes complicated when tracking multiple animals, because collisions and collusions become possible. Therefore, trajectory prediction and other algorithms need to be implemented.
+  * tracking is the process of connecting where each animal was in previous frames to its new position in sequential frames; 
+    i.e. connecting ROIs to the corresponding tadpoles. This becomes complicated when tracking multiple animals, because collisions and collusions become possible. Therefore, trajectory prediction and other algorithms need to be implemented.
 
 
 Detection: I will use a convolutional neural network. This program will implement the Faster R-CNN algorithm,  retrained for detection of Xenopus tadpoles. 
