@@ -132,6 +132,6 @@ void MatchingMethod( int, void* )
   imshow( image_window, img_display );
   imshow( result_window, result );
   //! [imshow]
-
+ 
   return;
 }
