@@ -5,6 +5,7 @@ import math
 class Animal:
 
     DEFAULT_BUFFER = 24  # length of line trailing behind each animal
+    VELOCITY_MULTIPLIER = 1000.0
 
     def __init__(self, point, r, t):
         self.x, self.y = point
@@ -13,10 +14,9 @@ class Animal:
         self.accel_vector = (0, 0)
         self.jerk_vector = 0
         self.current_direction = 0
-        self.data_points = [(t, point, (0, 0), (0, 0), 0), ]
         self.line_points = deque(maxlen=self.DEFAULT_BUFFER)
-
-        self.selection_index = 5
+        self.data_points = [(t, point, (0, 0), (0, 0), 0), ]        # time, position, velocity, accel, direction
+        self.selection_index = 5                                    # buffer of previous data points to run calculations on
 
     def update_location(self, point, r, t):
         # calculate speed, accel, etc.
@@ -31,55 +31,28 @@ class Animal:
 
     def parse_physics(self, new_pt, t):
 
-        if len(self.data_points) < self.selection_index:
-            return None
+        if len(self.data_points) < self.selection_index:            # don't run calculations until there are enough data points
+            return
 
         prev_points = self.data_points[-self.selection_index:]
 
-        x_points = [pt[1][0] for pt in list(prev_points)] + [new_pt[0]]  # add current coordinates to list
+        x_points = [pt[1][0] for pt in list(prev_points)] + [new_pt[0]]  # make x and y lists of past coordinates + current coordinate
         y_points = [pt[1][1] for pt in list(prev_points)] + [new_pt[1]]
 
-        delta_time = t - prev_points[0][0]
+        delta_time = t - prev_points[0][0]      # time elapsed between current point and the first in list
 
         dx = x_points[-1] - x_points[0]
         dy = y_points[-1] - y_points[0]
 
-        vx = dx / delta_time
-        vy = -1 * (dy / delta_time)
+        vx = self.VELOCITY_MULTIPLIER * dx / delta_time
+        vy = -self.VELOCITY_MULTIPLIER * dy / delta_time            # y axis must be reversed
 
         angle = 180/math.pi * math.atan2(vy, vx)
 
         # Use navigational bearings - straight up is 0 degrees.
         self.current_direction = 90 - angle if angle >= -90 else -(270 + angle)
-
-        time_elapsed = (t - prev_points[0][0]) / 1000.0  # time elapsed between first point and the last (most recent)
-
-        x_distance_traveled = 0
-        y_distance_traveled = 0
-
-        for j in range(len(x_points) - 1):
-            x_distance_traveled += abs(x_points[j] - x_points[j + 1])
-
-        for k in range(len(y_points) - 1):
-            y_distance_traveled += abs(y_points[k] - y_points[k + 1])
-
-        x_displacement = x_distance_traveled
-        y_displacement = y_distance_traveled
-
-        # X displacement vector can be positive or negative. Y points are swapped because Y axis goes down.
-        dx, dy = x_points[-1] - x_points[0], y_points[0] - y_points[-1]
-
-        if dx < 0:
-            x_displacement *= -1  # dx / abs(dx)
-
-        if dy < 0:
-            y_displacement *= -1  # dy / abs(dy)
-
-        vx = x_displacement / time_elapsed
-        vy = y_displacement / time_elapsed
-
-        velocity_vector = (vx ** 2 + vy ** 2) ** 0.5   # Velocity vector value should just be scalar 
         
+        # Other calculations - need revision
         '''
         if len(self.data_points) > self.selection_index:
 
@@ -157,13 +130,13 @@ class Animal:
 
             # accel_x = 1000.0 * (float(vx)**2 - float(vx_0)**2) / (2*float(x_displacement))
             # accel_y = 1000.0 * (float(vy)**2 - float(vy_0)**2) / (2*float(y_displacement))
+            # or:
             # accel_x = 1000.0 * (x_displacement - (vx_0 * time_elapsed))/(0.5*(time_elapsed**2))
             # accel_y = 1000.0 * (y_displacement - (vy_0 * time_elapsed))/(0.5*(time_elapsed**2))
             '''
 
-        # time, position, velocity, velocity vector, acceleration, accel vector, jerk, radius
-
         self.velocity_vector = (vx, vy)
+        
         # Not implemented yet
         self.accel_vector = (0.0, 0.0)
         self.jerk_vector = (0.0, 0,0)
