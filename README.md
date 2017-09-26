@@ -12,7 +12,7 @@ Approaches to these challenges:
 
   * Tracking (specifically, trajectory prediction): I will train an LSTM (Long Short-Term Memory) recurrent neural network on recorded tadpole movement data. 
 
-Project is in collaboration with neuroscience department at Bard College (*Xenopus laevis* used for neurobiological research).
+Project is in collaboration with neuroscience department at Bard College. `(tadpoles used for neurobiological research)`
 
 ###### Proof of Concept gif:
 
