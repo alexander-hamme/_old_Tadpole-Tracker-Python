@@ -3,7 +3,12 @@ import math
 
 
 class Animal:
-
+    
+    '''
+    Class to keep track of position and motion vectors. 
+    One Animal instance should be created for each animal to be tracked. 
+    '''
+    
     DEFAULT_BUFFER = 24  # corresponds to length of line trailing behind each animal in graphic window
 
     def __init__(self, point, r, t):
