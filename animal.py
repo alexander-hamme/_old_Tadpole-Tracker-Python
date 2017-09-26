@@ -53,84 +53,75 @@ class Animal:
         
         # Other kinematics calculations - this section is currently commented out because it is under revision
         '''
-        if len(self.data_points) > self.selection_index:
+        vx_0 = self.data_points[-2][2][0]
+        vy_0 = self.data_points[-2][2][1]
 
-            vx_0 = self.data_points[-2][2][0]
-            vy_0 = self.data_points[-2][2][1]
+        accel_x0 = self.data_points[-2][4][0]
+        accel_y0 = self.data_points[-2][4][1]
 
-            accel_x0 = self.data_points[-2][4][0]
-            accel_y0 = self.data_points[-2][4][1]
+        vx_0 = self.data_points[-1][2][0]
+        vy_0 = self.data_points[-1][2][1]
 
-            vx_0 = self.data_points[-1][2][0]
-            vy_0 = self.data_points[-1][2][1]
+        accel_x0 = self.data_points[-1][4][0]
+        accel_y0 = self.data_points[-1][4][1]
 
-            accel_x0 = self.data_points[-1][4][0]
-            accel_y0 = self.data_points[-1][4][1]
-            
-            # alternative equations:
+        # alternative equations:
 
-            # accel_x = (float(vx)**2 - float(vx_0)**2) / (2*float(x_displacement))
-            # accel_y = (float(vy)**2 - float(vy_0)**2) / (2*float(y_displacement))
-            # accel_x = (vx - vx_0) / time_elapsed  # (abs(vx) - abs(vx_0))
-            # accel_y = (vy - vy_0) / time_elapsed       # abs(vy) - abs(vy_0)
+        # accel_x = (float(vx)**2 - float(vx_0)**2) / (2*float(x_displacement))
+        # accel_y = (float(vy)**2 - float(vy_0)**2) / (2*float(y_displacement))
+        # accel_x = (vx - vx_0) / time_elapsed  # (abs(vx) - abs(vx_0))
+        # accel_y = (vy - vy_0) / time_elapsed       # abs(vy) - abs(vy_0)
 
-            # accel_x = 0 if abs(accel_x) < self.ACCEL_MIN else accel_x
-            # accel_y = 0 if abs(accel_y) < self.ACCEL_MIN else accel_y
+        # accel_x = 0 if abs(accel_x) < self.ACCEL_MIN else accel_x
+        # accel_y = 0 if abs(accel_y) < self.ACCEL_MIN else accel_y
 
+        accel_x = (x_displacement - (vx_0 * time_elapsed)) / (0.5 * (time_elapsed ** 2))
+        accel_y = (y_displacement - (vy_0 * time_elapsed)) / (0.5 * (time_elapsed ** 2))
 
-            accel_x = (x_displacement - (vx_0 * time_elapsed)) / (0.5 * (time_elapsed ** 2))
-            accel_y = (y_displacement - (vy_0 * time_elapsed)) / (0.5 * (time_elapsed ** 2))
+        acceleration_vector = (accel_x ** 2 + accel_y ** 2) ** 0.5
 
-            acceleration_vector = (accel_x ** 2 + accel_y ** 2) ** 0.5
+        # prev_velocity = self.data_points[-1][3]
+        # total_disp = (x_displacement**2 + y_displacement**2)**0.5
+        # acceleration_vector = (total_disp - (prev_velocity * time_elapsed)) / (0.5 * (time_elapsed**2))
+        # (velocity_vector**2 - prev_velocity**2) / (2 * total_disp)
 
-            # prev_velocity = self.data_points[-1][3]
-            # total_disp = (x_displacement**2 + y_displacement**2)**0.5
-            # acceleration_vector = (total_disp - (prev_velocity * time_elapsed)) / (0.5 * (time_elapsed**2))
-            # (velocity_vector**2 - prev_velocity**2) / (2 * total_disp)
+        # accel_x = 1000.0 * (float(vx)**2 - float(vx_0)**2) / (2*float(x_displacement))
+        # accel_y = 1000.0 * (float(vy)**2 - float(vy_0)**2) / (2*float(y_displacement))
+        ### alternative kinematics equations:
+        # accel_x = 1000.0 * (x_displacement - (vx_0 * time_elapsed))/(0.5*(time_elapsed**2))
+        # accel_y = 1000.0 * (y_displacement - (vy_0 * time_elapsed))/(0.5*(time_elapsed**2))
+        
+        if any(
+                (
+                                accel_x < 0 and accel_y < 0,
+                                accel_x < 0 and abs(accel_x) > 1000 * abs(accel_y),
+                                accel_y < 0 and abs(accel_y) > 1000 * abs(accel_x)
+                )
+        ):
+            acceleration_vector *= -1
 
-            print(accel_x, accel_y, acceleration_vector)
-            # acceleration_vector = 0 if abs(acceleration_vector) < self.ACCEL_MIN else acceleration_vector
+        # Jerk Vector = Change in acceleration over time
 
-            if any(
-                    (
-                                    accel_x < 0 and accel_y < 0,
-                                    accel_x < 0 and abs(accel_x) > 1000 * abs(accel_y),
-                                    accel_y < 0 and abs(accel_y) > 1000 * abs(accel_x)
-                    )
-            ):
-                # pass
-                acceleration_vector *= -1
+        jerk_x = (accel_x - accel_x0) / time_elapsed  # 1000.0 *
+        jerk_y = (accel_y - accel_y0) / time_elapsed  # 1000.0 *
 
-            print(acceleration_vector)
+        # jerk_x = 0 if abs(jerk_x) < self.JERK_MIN else jerk_x
+        # jerk_y = 0 if abs(jerk_y) < self.JERK_MIN else jerk_y
 
-            # Jerk Vector = Change in acceleration over time
+        jerk_vector = ((jerk_x ** 2 + jerk_y ** 2) ** 0.5)
 
-            jerk_x = (accel_x - accel_x0) / time_elapsed  # 1000.0 *
-            jerk_y = (accel_y - accel_y0) / time_elapsed  # 1000.0 *
-
-            # jerk_x = 0 if abs(jerk_x) < self.JERK_MIN else jerk_x
-            # jerk_y = 0 if abs(jerk_y) < self.JERK_MIN else jerk_y
-
-            jerk_vector = ((jerk_x ** 2 + jerk_y ** 2) ** 0.5)
-
-            # jerk_vector = 0 if abs(jerk_vector) < self.JERK_MIN else jerk_vector
+        # jerk_vector = 0 if abs(jerk_vector) < self.JERK_MIN else jerk_vector
 
 
-            if any(
-                    (
-                                    jerk_x < 0 and jerk_y < 0,
-                                    jerk_x < 0 and abs(jerk_x) > 1000 * abs(jerk_y),
-                                    jerk_y < 0 and abs(jerk_y) > 1000 * abs(jerk_x)
-                    )
-            ):
-                jerk_vector *= -1
-
-            # accel_x = 1000.0 * (float(vx)**2 - float(vx_0)**2) / (2*float(x_displacement))
-            # accel_y = 1000.0 * (float(vy)**2 - float(vy_0)**2) / (2*float(y_displacement))
-            ### alternative kinematics equations:
-            # accel_x = 1000.0 * (x_displacement - (vx_0 * time_elapsed))/(0.5*(time_elapsed**2))
-            # accel_y = 1000.0 * (y_displacement - (vy_0 * time_elapsed))/(0.5*(time_elapsed**2))
-            '''
+        if any(
+                (
+                                jerk_x < 0 and jerk_y < 0,
+                                jerk_x < 0 and abs(jerk_x) > 1000 * abs(jerk_y),
+                                jerk_y < 0 and abs(jerk_y) > 1000 * abs(jerk_x)
+                )
+        ):
+            jerk_vector *= -1
+        '''
 
         self.velocity_vector = (vx, vy)
         
