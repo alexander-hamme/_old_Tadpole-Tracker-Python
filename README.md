@@ -6,10 +6,11 @@ There are two major components of this tracker program: **Detection** and **Trac
   * tracking is the process of connecting where each animal was in previous frames to its new position in sequential frames, 
     i.e. connecting ROIs to the corresponding tadpoles. This becomes complicated when tracking multiple animals, because collisions and collusions become possible. Therefore, trajectory prediction and other algorithms need to be implemented.
 
+Approaches to these challenges:
 
-Detection: I will use a convolutional neural network. This program will implement the Faster R-CNN algorithm,  retrained for detection of Xenopus tadpoles. 
+Detection: I will use a convolutional neural network. This program will implement the Faster R-CNN algorithm, retrained for detection of Xenopus tadpoles. 
 
-Tracking (trajectory prediction specifically): I will train a sequential neural network on recorded tadpole movement data. 
+Tracking (specifically, trajectory prediction): I will train an LSTM (Long Short-Term Memory) recurrent neural network on recorded tadpole movement data. 
 
 Project is in collaboration with neuroscience department at Bard College (*Xenopus laevis* used for neurobiological research).
 
