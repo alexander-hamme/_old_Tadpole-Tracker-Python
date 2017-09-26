@@ -78,33 +78,16 @@ class Animal:
         vx = x_displacement / time_elapsed
         vy = y_displacement / time_elapsed
 
-        velocity_vector = (vx ** 2 + vy ** 2) ** 0.5
-
-        # Velocity value should just be scalar? it doesn't really help if its negative...?
+        velocity_vector = (vx ** 2 + vy ** 2) ** 0.5   # Velocity vector value should just be scalar 
+        
         '''
-        if any(
-                (
-                                vx < 0 and vy < 0,
-                                vx < 0 and abs(vx) > 1000 * abs(vy),
-                                vy < 0 and abs(vy) > 1000 * abs(vx)
-                )
-        ):
-            velocity_vector *= -1
-        '''
+        if len(self.data_points) > self.selection_index:
 
-        if 1 == 0 and len(self.data_points) > self.selection_index:
-
-            ''' or do acceleration using previous velocity vector for Scalar values??'''
-
-            ''' Although, I guess what we care about IS the accel *in response* to what the velocity is doing,
-                because that's what'll tell us if it's a C Start?
-            '''
-
-            '''vx_0 = self.data_points[-2][2][0]
+            vx_0 = self.data_points[-2][2][0]
             vy_0 = self.data_points[-2][2][1]
 
             accel_x0 = self.data_points[-2][4][0]
-            accel_y0 = self.data_points[-2][4][1]'''
+            accel_y0 = self.data_points[-2][4][1]
 
             vx_0 = self.data_points[-1][2][0]
             vy_0 = self.data_points[-1][2][1]
@@ -172,23 +155,6 @@ class Animal:
             ):
                 jerk_vector *= -1
 
-                # print ("{} and {} means jerk vector is {}".format(jerk_x, jerk_y, jerk_vector))
-                # elif jerk_x < 0 and abs(jerk_x) > abs(jerk_y):
-                #     jerk_vector = -jerk_vector
-                # elif jerk_y < 0 and abs(jerk_y) > abs(jerk_x):
-                #     jerk_vector = -jerk_vector
-
-                # jerk_vector = ((accel_x**2 + accel_y**2)**0.5 - (accel_x0**2 + accel_y0**2)**0.5
-
-            # impulse_vector = 1 * (vx**2 + vy**2)**0.5 - (vx_0**2 + vy_0**2)**0.5    # (Considers mass to be 1)
-
-            '''
-            print("Vx is {}, Vx0 is {}, time is {}, x_displacement is {}".format(vx, vx_0, time_elapsed, x_displacement))
-            if not (x_displacement == 0 or y_displacement == 0):
-                print("Acceleration1 = {}".format((float(vx)**2 - float(vx_0)**2) / (2*float(abs(x_displacement)))))
-            print("Acceleration2 = {}".format((abs(vx) - abs(vx_0)) / time_elapsed))
-            print("Acceleration3 = {}\n".format((x_displacement - (abs(vx_0) * time_elapsed))/(0.5*(time_elapsed**2))))
-
             # accel_x = 1000.0 * (float(vx)**2 - float(vx_0)**2) / (2*float(x_displacement))
             # accel_y = 1000.0 * (float(vy)**2 - float(vy_0)**2) / (2*float(y_displacement))
             # accel_x = 1000.0 * (x_displacement - (vx_0 * time_elapsed))/(0.5*(time_elapsed**2))
@@ -198,5 +164,6 @@ class Animal:
         # time, position, velocity, velocity vector, acceleration, accel vector, jerk, radius
 
         self.velocity_vector = (vx, vy)
-        self.accel_vector = (0.5, 0.5)
-        self.jerk_vector = (0.5, -0.5)
+        # Not implemented yet
+        self.accel_vector = (0.0, 0.0)
+        self.jerk_vector = (0.0, 0,0)
