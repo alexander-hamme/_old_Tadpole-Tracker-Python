@@ -4,7 +4,7 @@ import math
 
 class Animal:
 
-    DEFAULT_BUFFER = 24  # length of line trailing behind each animal
+    DEFAULT_BUFFER = 24  # corresponds to length of line trailing behind each animal in graphic window
 
     def __init__(self, point, r, t):
         self.x, self.y = point
