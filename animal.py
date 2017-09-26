@@ -37,14 +37,14 @@ class Animal:
         x_points = [pt[1][0] for pt in list(prev_points)] + [new_pt[0]]  # make x and y lists of past coordinates + current coordinate
         y_points = [pt[1][1] for pt in list(prev_points)] + [new_pt[1]]
 
-        delta_time = (t - prev_points[0][0])/1000.0     # time elapsed between current point and the first in list. 
-        # convert from milliseconds to seconds so kinematics values are higher than zero
+        # time elapsed between current point and the first in list
+        delta_time = (t - prev_points[0][0])/1000.0    # convert from milliseconds to seconds so kinematics values are greater than zero
 
         dx = x_points[-1] - x_points[0]
         dy = y_points[-1] - y_points[0]
 
         vx = dx / delta_time
-        vy = -1 * dy / delta_time            # y axis must be reversed
+        vy = -1 * dy / delta_time            # reverse y axis so increasing is up amd decreasing is down
 
         angle = 180/math.pi * math.atan2(vy, vx)
 
