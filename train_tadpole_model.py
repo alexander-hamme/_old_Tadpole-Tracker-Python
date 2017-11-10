@@ -113,7 +113,7 @@ class TadpoleConvNet:
         :param num_channels:    image color channels, 3 if image is in RGB or 1 if it is monochrome
         :param filter_size:     kernel for filter size to extract subregions from image
         :param num_filters:     (number of neurons)
-        :return:                multidimensional (4D) tensor
+        :return:                2-D tensor from 4-D input and filter Tensors
         """
 
         # Initialize values for weights and biases with normal distribution and small variance
