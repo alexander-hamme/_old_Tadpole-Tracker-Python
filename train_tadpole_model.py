@@ -238,7 +238,7 @@ class TadpoleConvNet:
     def testConvNet(self):
 
         '''
-        This is a test of a non-custom convnet implementation using Tensorflow,
+        This is a test of a non-custom convnet implementation using TFLearn wrapper library for Tensorflow,
         to test what accuracy can be achieved on my current images dataset.
         
         Currently achieves about 80-90% accuracy, which is acceptable, 
