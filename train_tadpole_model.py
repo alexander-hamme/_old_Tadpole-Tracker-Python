@@ -23,7 +23,7 @@ class TadpoleConvNet:
     TEST_DIR = 'images_dataset/test'
     IMG_SIZE = 50                                   # dimension to resize to
     NUM_CHANNELS = 1                                # images will be converted to grayscale
-    LR = 0.01                                      # learning rate
+    LR = 0.01                                       # learning rate
     STDDEV = 0.05                                   # use normal distribution with small variance for initial values of weights
 
     VAL_SIZE = 20                                   # Validation size (number of images to hold back to test on)
