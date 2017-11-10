@@ -31,7 +31,7 @@ class TadpoleConvNet:
 
     NUM_CLASSES = 2
     CLASS_ONE = "tadpole"
-    CLASS_TWO = "ant"        # I chose ants as a class to train against, because ants look somewhat but not too similar to tadpoles
+    CLASS_TWO = "ant"        # I chose ants as a class to train against, because ants look somewhat (but not too) similar to tadpoles
 
     def __init__(self):
         self.train_data = np.array([])
