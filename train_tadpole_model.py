@@ -245,6 +245,10 @@ class TadpoleConvNet:
         but for this particular classification problem it should be possible to get much higher than that.
         I would guess it can reach at least 95%, because Xenopus tadpoles have a very distinct pattern and shape.
         '''
+        
+        N_EPOCHS = 30       
+        # My training dataset is currently too small to run more epochs, 
+        # as it is the convnet is already probably overfitting severely
 
         self.load_data('train_data.npy', 'test_data.npy')
 
@@ -275,7 +279,7 @@ class TadpoleConvNet:
 
         model = tflearn.DNN(convnet, tensorboard_dir='log', tensorboard_verbose=0)
 
-        model.fit({'input': X_train}, {'targets': y_train}, n_epoch=20,
+        model.fit({'input': X_train}, {'targets': y_train}, n_epoch=N_EPOCHS,
                   validation_set=({'input': X_test}, {'targets': y_test}),
                   snapshot_step=self.VAL_SIZE, show_metric=True, run_id=self.MODEL_NAME)
 
@@ -306,6 +310,23 @@ class TadpoleConvNet:
             y.axes.get_yaxis().set_visible(False)
 
         plt.show()
+        
+        
+        # Run predictions on entire testing data set and calculate accuracy
+        for data in self.test_data:
+
+            clss = data[1][1]
+            img_data = data[0]
+            img_data = img_data.reshape(self.IMG_SIZE, self.IMG_SIZE, 1)
+            predict = model.predict([img_data])[0]
+
+            if np.argmax(predict) == clss:
+                numb_right += 1
+            else:
+                numb_wrong += 1
+            total_numb += 1
+
+        print("\nClassified {} correcly out of {} --> accuracy {:.3f}".format(numb_right, total_numb, float(numb_right)/total_numb))
 
 
 tadconv = TadpoleConvNet()
