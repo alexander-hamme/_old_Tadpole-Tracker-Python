@@ -248,7 +248,7 @@ class TadpoleConvNet:
         
         N_EPOCHS = 30       
         # My training dataset is currently too small to run more epochs, 
-        # as it is the convnet is already probably overfitting severely
+        # the convnet is probably overfitting already
 
         self.load_data('train_data.npy', 'test_data.npy')
 
