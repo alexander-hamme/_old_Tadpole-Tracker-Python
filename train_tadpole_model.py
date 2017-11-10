@@ -1,5 +1,5 @@
 """
-An implementation of Convolutional Neural Network using TensorFlow
+A convolutional neural network implementation using TensorFlow
 @author: Alexander Hamme
 """
 from tflearn.layers.core import input_data, dropout, fully_connected
