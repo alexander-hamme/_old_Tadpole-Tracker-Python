@@ -50,22 +50,22 @@ class TadpoleConvNet:
 
         training_data = []
 
-        prog_bar = tqdm(os.listdir(self.TRAIN_DIR))
+        prog_bar = tqdm(os.listdir(self.TRAIN_DIR))   # Use tqdm for image loading progress meter
 
-        for img in prog_bar:        # Use tqdm for image loading progress meter
+        for img in prog_bar:
 
             prog_bar.set_description("Loading training set")
 
             path = os.path.join(self.TRAIN_DIR, img)
 
-            img_data = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+            img_data = cv2.imread(path, cv2.IMREAD_GRAYSCALE)   # load images as grayscale; xenopus tadpoles don't have any color
 
             img_data = cv2.resize(img_data, (self.IMG_SIZE, self.IMG_SIZE))
 
             training_data.append([np.array(img_data), self.create_label(img)])
 
         shuffle(training_data)
-        np.save(filename, training_data)
+        np.save(filename, training_data)   # save np array to binary file
         return training_data
 
     def create_test_data(self, filename):
@@ -124,14 +124,10 @@ class TadpoleConvNet:
         # - batch_stride must be 1, or it will skip images in the batch
         # - x_stride and y_stride are usually the same. In this case I used 1  TODO: test 2, check for improvement
 
-        # Padding = 'SAME' means that we pad the input with 0s so that output x,y dimensions are same as input
+        # Padding = 'SAME' means that we pad the input with zeros so that output x,y dimensions are same as input
         layer = tf.nn.conv2d(input=input_tensor, filter=weights, strides=strides, padding='SAME')
 
-        print(type(layer))
-
         layer += biases
-
-        print(type(layer))
 
         filter_size = [1, 2, 2, 1]  # ksize / filter size are 2*2 in x and y direction, and 1 for batch and depth.
         ksize = [1, 2, 2, 1]        # Note that specifying stride size to be 2 ensures pooled regions do not overlap
@@ -139,32 +135,27 @@ class TadpoleConvNet:
         # perform max-pooling --> extract subregions of feature map, making output exactly half the size of the input
         layer = tf.nn.max_pool(value=layer, ksize=ksize, strides=filter_size, padding='SAME')
 
-        print(type(layer))
-
         # Pass output of max pooling to ReLU, which is the   >>>activation function   ??
         layer = tf.nn.relu(layer)
 
-        print(type(layer))
-
-        return layer            # type --> multidimensional Tensor?
+        return layer            # type --> 4D Tensor
 
     def create_flattened_layer(self, layer):
         """
-
         :param layer: multidimensional (4D) Tensor
-        :return: reshaped one dimensional Tensor
+        :return: reshaped one-dimensional Tensor
         """
 
         # convert 4D Tensor to one dimension
         layer_shape = layer.get_shape()
         num_features = layer_shape[1:4].num_elements()
-        layer = tf.reshape(layer, [-1, num_features])   # -1 tells tf that this will be dynamically updated. This will be for the batch size
+        layer = tf.reshape(layer, [-1, num_features])   # -1 tells tf that this will be dynamically updated. This will be used for the batch size
         return layer
 
     def create_fc_layer(self, input_tensor, num_inputs, num_outputs, use_relu=True):
         """
         create fully connected ("Dense") layer. It may be desirable to add a ReLU, so <use_relu> parameter added
-        :param input_tensor:    (most likely one dimensional) Tensor
+        :param input_tensor:    (most likely one-dimensional) Tensor
         :param num_inputs:      number of incoming connections (from neurons)
         :param num_outputs:     number of outgoing connections
         :param use_relu:        whether to use ReLU activation
@@ -180,13 +171,12 @@ class TadpoleConvNet:
 
         return layer
 
-
     def create_network(self):
         """
 
         this is still in progress.
 
-        TODO: try out different architecture designs to see if any give improvement
+        TODO: try out different architecture designs to see if any give improvement?
         :return: accuracy or validation loss ?
         """
 
@@ -249,7 +239,11 @@ class TadpoleConvNet:
 
         '''
         This is a test of a non-custom convnet implementation using Tensorflow,
-        to test what accuracy can be achieved on my current images dataset
+        to test what accuracy can be achieved on my current images dataset.
+        
+        Currently achieves about 80-90% accuracy, which is acceptable, 
+        but for this particular classification problem it should be possible to get much higher than that.
+        I would guess it can reach at least 95%, because Xenopus tadpoles have a very distinct pattern and shape.
         '''
 
         self.load_data('train_data.npy', 'test_data.npy')
@@ -291,7 +285,7 @@ class TadpoleConvNet:
 
         fig = plt.figure()
 
-        for num, data in enumerate(self.test_data[:30]):
+        for num, data in enumerate(self.test_data[:30]):  # visualize classifications for the first 30 test images
 
             img_num = data[1]
             img_data = data[0]
@@ -306,7 +300,7 @@ class TadpoleConvNet:
             else:
                 str_label = 'tadpole'
 
-            y.imshow(orig, cmap='gray')
+            y.imshow(orig, cmap='gray')    
             plt.title(str_label)
             y.axes.get_xaxis().set_visible(False)
             y.axes.get_yaxis().set_visible(False)
