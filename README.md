@@ -12,7 +12,7 @@ There are two major components of this tracker program: **Detection** and **Trac
 
 Approaches:
 
-  * Detection: I will use a convolutional neural network and implement the Faster R-CNN algorithm, retrained for detection of Xenopus tadpoles. 
+  * Detection: I will use a convolutional neural network and implement the Faster R-CNN algorithm, trained for detection of Xenopus tadpoles. 
 
   * Tracking (specifically, trajectory prediction): I will train an LSTM (Long Short-Term Memory) recurrent neural network on recorded tadpole movement data. 
 
