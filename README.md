@@ -24,7 +24,7 @@ Approaches:
 <br>
 <br>
 
-###### Initial classification run on small batch of training images:   (here, 100% accuracy!)
+###### Initial classification run on small batch of training images   (in this case, 100% accuracy!)
 
 ![Uh oh, it appears the gif didn't load. Please find it as "initial_test.png" in the images folder of this repositiory.](/images/initial_test.png?raw=true "Classification test")
 
