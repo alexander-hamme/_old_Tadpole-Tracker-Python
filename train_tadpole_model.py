@@ -21,26 +21,9 @@ import math
 import cv2
 import os
 
-# https://medium.com/@curiousily/tensorflow-for-hackers-part-iii-convolutional-neural-networks-c077618e590b
-
-# http://cv-tricks.com/tensorflow-tutorial/save-restore-tensorflow-models-quick-complete-tutorial/
-
-# http://cv-tricks.com/tensorflow-tutorial/training-convolutional-neural-network-for-image-classification/
-
-# https://github.com/alexander-hamme/cv-tricks.com
-
-# http://cv-tricks.com/
-
-"""Architecture of the network
-
-When designing the architecture of a neural network you have to decide on:
-How do you arrange layers? which layers to use? how many neurons to use in each layer etc.? 
-Designing the architecture is slightly complicated and advanced topic and takes a lot of research. 
 """
+TODO: Need to assemble (create) more images of tadpoles, training image dataset is far too small
 """
-TODO: Need to assemble more images of tadpoles, training image dataset is far too small
-"""
-
 
 class TadpoleConvNet:
 
@@ -64,55 +47,6 @@ class TadpoleConvNet:
         self.train_data = []#np.array([])
         self.test_data = []#np.array([])
 
-        # self.img_size = img_size                    # dimension to resize to
-        # self.img_pixels = img_size**2
-
-    def create_labelOLD(self, image_name):
-        """ Create a one-hot encoded vector from image name"""
-        word_label = image_name.split('.')[0]
-
-        if self.CLASS_ONE in word_label:
-            return np.array([1, 0])
-        elif self.CLASS_TWO in word_label:
-            return np.array([0, 1])
-
-    def create_train_dataOLD(self, filename):
-
-        """
-
-        TODO: add image contortions to multiply dataset!!!
-
-
-        :param filename:
-        :return:
-        """
-
-        training_data = []
-
-        prog_bar = tqdm(os.listdir(self.TRAIN_DIR))             # Use tqdm for image loading progress meter
-
-        for img_name in prog_bar:
-
-            prog_bar.set_description("Loading training set")
-
-            path = os.path.join(self.TRAIN_DIR, img_name)
-
-            img_data = cv2.imread(path, cv2.IMREAD_GRAYSCALE)   # load images as grayscale; xenopus tadpoles don't have any color
-
-            img_data = cv2.resize(img_data, (self.IMG_SIZE, self.IMG_SIZE))     # cv2.resize(image, (image_size, image_size),0,0, cv2.INTER_LINEAR) ??
-
-            # image = image.astype(np.float32)
-            # image = np.multiply(image, 1.0 / 255.0)
-
-            training_data.append([np.array(img_data), self.create_label(img_name)])
-
-        # random.shuffle(training_data)
-
-        # dataset = tf.data.Dataset.from_tensor_slices(training_data)
-
-        np.save(filename, training_data)
-        return training_data
-
     def create_label(self, image_name):
         """ Create a one-hot encoded vector from image name"""
         word_label = image_name.split('.')[0]
@@ -122,19 +56,14 @@ class TadpoleConvNet:
         elif self.CLASS_TWO in word_label:
             return tf.convert_to_tensor([0, 1])  # , 1])
 
-    def create_train_data(self, train_dir, savename):#, val_savename):
+    def create_train_data(self, train_dir, savename):
 
         """
 
-        TODO: add image contortions to multiply dataset!!!
-
+        TODO: add image distortions to increase size of dataset
 
         :param train_dir: String, filename to either load, or save name for loaded data as np file
         :return: Tensor array
-
-
-        Possibilities:   just return an input tensor with the dimensions (N_examples, IMG_SIZE*IMG_SIZE),
-        the number of pixels in any one of the images?
 
         """
 
@@ -173,7 +102,7 @@ class TadpoleConvNet:
             training_data.append(img_data)
             labels.append(self.create_label(img_name))
 
-        # random.shuffle(training_data)     NO, unless you zip labels and imgs up together
+        # random.shuffle(training_data)     not unless zip labels and imgs up together
 
         '''
         idx = self.VAL_SPLIT * len(training_data)
@@ -183,14 +112,14 @@ class TadpoleConvNet:
         val_dataset = tf.data.Dataset.from_tensor_slices((val, labels))
         '''
 
-        # TODO: training_data = tf.data.Dataset.from_tensor_slices((training_data, labels))
+        # training_data = tf.data.Dataset.from_tensor_slices((training_data, labels))
 
         # train_dataset = tf.data.Dataset.from_tensor_slices((training_data, labels))
         # train_dataset.cache(filename=train_dir)
         # assert isinstance(train_dataset, tf.data.Dataset)
 
         """
-        SAVE AS NUMPY FILE
+        TODO: save as numpy file instead
         if self.SAVEDATA:
             with open(savename, "wb") as handle:
                 pickle.dump([training_data, labels], handle)#, protocol=pickle.HIGHEST_PROTOCOL)
@@ -235,7 +164,7 @@ class TadpoleConvNet:
         # testing_data = tf.data.Dataset.from_tensor_slices((testing_data, labels))
 
         # assert isinstance(testing_data, tf.data.Dataset)
-        """SAVE AS NUMPY FILE
+        """TODO: save as numpy file instead
         if self.SAVEDATA:
             with open(save_filename, "wb") as handle:
                 pickle.dump([testing_data, labels], handle)#protocol=pickle.HIGHEST_PROTOCOL)
@@ -254,54 +183,46 @@ class TadpoleConvNet:
 
     def weight_variable(self, shape, name):
         """
-        To create this model, we're going to need to create a lot of weights and biases.
-        One should generally initialize weights with a small amount of noise for symmetry breaking, and to prevent 0 gradients.
-        Since we're using ReLU neurons, it is also good practice to initialize them with a slightly positive initial bias to avoid "dead neurons".
-        Instead of doing this repeatedly while we build the model, let's create two handy functions to do it for us.
-
+        To create this model, need to create a lot of weights and biases.
+        Weights should be initialized with a small amount of noise for symmetry breaking, and to prevent 0 gradients.
+        Since I'm implementing the Rectified Linear Units (ReLU) activation function, it's also good to create them 
+        with a slightly positive initial bias, to avoid dead neurons.
         :param shape:
         :return:
         """
-        std_dev = 1.0 / math.sqrt(float(TadpoleConvNet.IMG_PIXELS))
-        initial = tf.truncated_normal(shape, stddev=std_dev, name=name)            #todo:  or  0.1?
+        std_dev = 1.0 / math.sqrt(float(TadpoleConvNet.IMG_PIXELS)) # todo:  or just 0.1?
+        initial = tf.truncated_normal(shape, stddev=std_dev, name=name)           
         return tf.Variable(initial)
 
     def bias_variable(self, shape, name):
-        # generates a bias variable of given shape.
+        # generates a bias variable of the given shape.
         initial = tf.constant(value=0.1, shape=shape, name=name)
         return tf.Variable(initial)
 
     def maxpool2d(self, tensor, k=2):
-        # MaxPool2D wrapper
+        # max_pool wrapper
         return tf.nn.max_pool(tensor, ksize=[1, k, k, 1], strides=[1, k, k, 1], padding='SAME')
 
     def conv2d(self, x, w, strides=1):
-        '''by default uses full stride'''
+        # use full stride by default
         return tf.nn.conv2d(x, filter=w, strides=[1, strides, strides, 1], padding='SAME')
 
     def build_network(self, data):
 
-        '''if input Tensor is 1-D, reshape
-        # Reshape to use within a convolutional neural net.
-        # Last dimension is for "features" - there is only one here, since images are
-        # grayscale -- it would be 3 for an RGB image, 4 for RGBA, etc.
-        '''
-
-        # with tf.name_scope('reshape'):
+        # if input Tensor is 1-D, reshape
+        # with tf.name_scope('reshape'):            
         #     data = tf.reshape(data, [-1, self.IMG_SIZE, self.IMG_SIZE, self.NUM_CHANNELS])
 
         layer1_size = 32
         layer1_kernel = 5
         layer2_size = 64
         '''
-        more layers?
-        
-        layer2_kernel = 3?
+        todo: test accuracy of deeper network after adding more hidden layers
         '''
         fc1_size = 1024
 
         # Hidden 1
-        with tf.name_scope('conv1'):                                    # 1 image       or 1 channel??
+        with tf.name_scope('conv1'):                                    # 1 image       or 1 channel?
             weights1 = self.weight_variable([layer1_kernel, layer1_kernel, 1, layer1_size], name='weights1')       # TadpoleConvNet.IMG_PIXELS
             biases1 = self.bias_variable([layer1_size], name='biases1')      # initialize biases as a Tensor array
             layer = self.conv2d(data, weights1) + biases1
@@ -313,7 +234,7 @@ class TadpoleConvNet:
 
         # Hidden 2 -- maps 32 feature maps to 64.
         with tf.name_scope('conv2'):
-            weights2 = self.weight_variable([layer1_kernel, layer1_kernel, layer1_size, layer2_size], name='weights2')    # todo: is this (strides, strides) or (strides, filters)?
+            weights2 = self.weight_variable([layer1_kernel, layer1_kernel, layer1_size, layer2_size], name='weights2')    # todo: should this be (strides, strides) or (strides, filters)?
             biases2 = self.bias_variable([layer2_size], name='biases2')     # tf.zeros([layer2_size])
             layer2 = self.conv2d(pool1, weights2) + biases2
             hidden2 = tf.nn.relu(layer2)
@@ -323,38 +244,39 @@ class TadpoleConvNet:
             pool2 = self.maxpool2d(hidden2)
 
         # Fully connected layer 1 -- after 2 round of downsampling, our NxN image
-        # is down to N/4 x N/4 x 64 feature maps -- this maps that to 1024 features.
-        '''Now that the image size has been reduced to 7x7, we add a fully-connected layer 
-           with 1024 neurons to allow processing on the entire image. 
+        # is down to N/4 x N/4 x 64 feature maps. This maps those to 1024 features.
+        '''
+        Image size has been reduced to N/4 X N/4, now add a fully-connected layer 
+        with 1024 neurons to allow processing on the entire image. 
            
-           We reshape the tensor from the pooling layer into a batch of vectors, multiply by a weight matrix, 
-           add a bias, and apply a ReLU.
-           '''
+        Reshape the tensor from the pooling layer into a batch of vectors, multiply by a weight matrix, 
+        add bias, and apply ReLU.
+        '''
         with tf.name_scope('fc1'):
 
-            '''ASSUMES POOLING HAS USED 2X2 STRIDE FILTER'''
-
+            '''Note: this currently rests on the assumption that pooling has used 2X2 stride filter'''
+            # todo: fix this to check what stride/filter kernel was used for pooling
             d_sampd_dim = TadpoleConvNet.IMG_SIZE / 2 / 2       # resulting dimension after two 2x2 max pool downsamplings
 
             weights3 = self.weight_variable([d_sampd_dim * d_sampd_dim * layer2_size, fc1_size], name='fc1_weights')
             biases3 = self.bias_variable([fc1_size], name='fc1_biases')
 
-            '''Note: IMG_SIZE must be a multiple of 4 or else the rounding of integer division will cause an error'''
+            '''Note: IMG_SIZE must (currently) be a multiple of 4 or else the round-off of integer division will cause an error'''
             flattened = tf.reshape(pool2, [-1, d_sampd_dim * d_sampd_dim * layer2_size])
 
-            layer3 = tf.matmul(flattened, weights3) + biases3
+            layer3 = tf.matmul(flattened, weights3) + biases3       # multiply features by weights vector and add biases
 
-            fc_layer1 = tf.nn.relu(layer3)
+            fc_layer1 = tf.nn.relu(layer3)          # apply ReLU
 
-        # Dropout - controls the complexity of the model, prevents co-adaptation of features.
+        # Dropout - controls the complexity of the model by preventing co-adaptation of features and reducing overfitting.
         with tf.name_scope('dropout'):
             ''' 
-            To reduce overfitting, we will apply dropout before the readout layer. 
-            We create a placeholder for the probability that a neuron's output is kept during dropout. 
+            Apply dropout before the readout layer to reduce overfitting. 
+            keep_prob is the probability that any single neuron's output is kept during dropout. 
             
-            This allows us to turn dropout on during training, and turn it off during testing. 
-            TensorFlow's tf.nn.dropout op automatically handles scaling neuron outputs in addition to masking them, 
-            so dropout just works without any additional scaling.
+            By doing this, dropout can be turned on during training and off during testing. 
+            
+            Also, the tf.nn.dropout op automatically handles scaling neuron outputs, so dropout doesn't need any additional scaling.
             '''
             keep_prob = tf.placeholder(tf.float32)
             fc_layer1_dropped = tf.nn.dropout(fc_layer1, keep_prob)
@@ -364,72 +286,7 @@ class TadpoleConvNet:
             weights4 = self.weight_variable([fc1_size, self.NUM_CLASSES], name='fc2_weights')
             biases4 = self.bias_variable([self.NUM_CLASSES], name='fc2_biases')
 
-            # TODO:  what exactly is y_conv?   conv_net??     --> rename
             y_conv = tf.matmul(fc_layer1_dropped, weights4) + biases4
-
-        """
-        # Linear
-        with tf.name_scope('softmax_linear'):
-            weights3 = tf.Variable(
-                tf.truncated_normal([layer2_size, NUM_CLASSES],
-                                    stddev=1.0 / math.sqrt(float(layer2_size))),
-                name='weights')
-            biases = tf.Variable(tf.zeros([NUM_CLASSES]),
-                                 name='biases')
-            logits = tf.matmul(hidden2, weights) + biases
-        return logits
-
-        # Create the neural network
-
-        # Define a scope for reusing the variables
-        with tf.variable_scope(TadpoleConvNet.MODEL_NAME, reuse=reuse):
-
-            # shape = [-1, self.IMG_SIZE, self.IMG_SIZE, 1])
-
-            layer1_size = 32
-            layer1_kernel = 5
-            layer2_size = 64
-            layer2_kernel = 3
-            fc_size = 1024
-
-
-            # TF Estimator input is a dict, in case of multiple inputs
-            # x = x_dict['images']
-
-            # MNIST data input is a 1-D vector of 784 features (28*28 pixels)
-            # Reshape to match picture format [Height x Width x Channel]
-            # Tensor input become 4-D: [Batch Size, Height, Width, Channel]
-
-            x_data = tf.reshape(data, shape=[-1, self.IMG_SIZE, self.IMG_SIZE, self.NUM_CHANNELS])
-
-            # Convolution Layer with 32 filters and a kernel size of 5
-            conv1 = tf.layers.conv2d(x_data, filters=layer1_size, kernel_size=layer1_kernel, activation=tf.nn.relu, padding='SAME')
-            # Max Pooling (down-sampling) with strides of 2 and kernel size of 2
-            conv1 = tf.layers.max_pooling2d(conv1, pool_size=2, strides=2, padding='SAME')
-
-            # Convolution Layer with 64 filters and a kernel size of 3
-            conv2 = tf.layers.conv2d(conv1, filters=layer2_size, kernel_size=layer2_kernel, activation=tf.nn.relu, padding='SAME')
-            # Max Pooling (down-sampling) with strides of 2 and kernel size of 2
-            conv2 = tf.layers.max_pooling2d(conv2, pool_size=2, strides=2, padding='SAME')
-
-            # Flatten the data to a 1-D vector for the fully connected layer
-            '''fc1 = tf.contrib.layers.flatten(conv2)'''
-
-            layer_shape = conv2.get_shaper()
-            num_features = layer_shape[1:4].num_elements()
-            fc1 = tf.reshape(conv2, shape=[-1, num_features])  # -1 tells tf that this will be dynamically updated. This will be used for the batch size
-
-            # Fully connected layer (in tf contrib folder for now)
-            '''self.create_fc_layer?'''
-            fc1 = tf.layers.dense(fc1, units=fc_size)
-
-            # Apply Dropout (if is_training is False, dropout is not applied)
-            fc1 = tf.layers.dropout(fc1, rate=dropout, training=True)
-
-            # Output layer, class prediction
-            out = tf.layers.dense(fc1, units=self.NUM_CLASSES)
-
-        return out"""
 
         return y_conv, keep_prob
 
