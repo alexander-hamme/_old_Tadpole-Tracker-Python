@@ -189,7 +189,7 @@ class TadpoleConvNet:
         :param shape:
         :return:
         """
-        std_dev = 1.0 / math.sqrt(float(TadpoleConvNet.IMG_PIXELS)) # todo:  or just 0.1?
+        std_dev = 1.0 / math.sqrt(float(TadpoleConvNet.IMG_PIXELS))     # todo:  or just self.STDDEV?
         initial = tf.truncated_normal(shape, stddev=std_dev, name=name)           
         return tf.Variable(initial)
 
