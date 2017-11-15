@@ -456,7 +456,7 @@ class TadpoleConvNet:
             model_out = model.predict([data])[0]
 
             if np.argmax(model_out) == 1:
-                str_label = ''      # detecting tadpoles is the only classification of interest
+                str_label = 'not tadpole'      # detecting tadpoles is the only classification of interest
             else:
                 str_label = 'tadpole'
 
