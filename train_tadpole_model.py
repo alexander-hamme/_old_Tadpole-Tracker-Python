@@ -1,9 +1,8 @@
 """
-An implementation of Convolutional Neural Network using TensorFlow
+Implementation of a Convolutional Neural Network using TensorFlow
 @author: Alexander Hamme
 """
 from __future__ import print_function
-
 from tensorflow.python.framework.errors_impl import InvalidArgumentError, OutOfRangeError
 from tflearn.layers.core import input_data, dropout, fully_connected
 from tflearn.layers.conv import conv_2d, max_pool_2d
@@ -386,7 +385,7 @@ class TadpoleConvNet:
 
             print("Shapes:", x_imgs.shape, y_lbls.shape)
 
-            print('test accuracy {}'.format(        # \/  are these not the right dimensions?
+            print('test accuracy {}'.format(        # \/ Currently causing ValueError, are these not the right dimensions?
                 accuracy.eval(feed_dict={x_imgs: self.test_data[0], y_lbls: np.array(self.test_data[1]), keep_prob: 1.0}))
             )
 
