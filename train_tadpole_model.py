@@ -289,13 +289,13 @@ class TadpoleConvNet:
 
         return y_conv, keep_prob
 
-    def run(self, iterations, batch_size, log_step=10):
+    def main(self, iterations, batch_size, log_step=10):
 
         # x = tf.placeholder(tf.float32, [None, self.IMG_PIXELS])
 
         # initialize first layer for input
-        x_imgs = tf.placeholder(tf.float32, shape=[None, self.IMG_SIZE, self.IMG_SIZE, self.NUM_CHANNELS], name='x_imgs')  # images
-        y_lbls = tf.placeholder(tf.float32, shape=[None, self.NUM_CLASSES], name='y_lbls')  # labels
+        x_imgs = tf.placeholder(tf.float32, shape=[None, TadpoleConvNet.IMG_SIZE, TadpoleConvNet.IMG_SIZE, TadpoleConvNet.NUM_CHANNELS], name='x_imgs')  # images
+        y_lbls = tf.placeholder(tf.float32, shape=[None, TadpoleConvNet.NUM_CLASSES], name='y_lbls')  # labels
 
         y_conv, keep_prob = self.build_network(x_imgs)
 
@@ -305,7 +305,7 @@ class TadpoleConvNet:
         cross_entropy = tf.reduce_mean(cross_entropy)
 
         with tf.name_scope('optimizer'):
-            training_step = tf.train.AdamOptimizer(learning_rate=self.LR).minimize(cross_entropy)
+            training_step = tf.train.AdamOptimizer(learning_rate=TadpoleConvNet.LR).minimize(cross_entropy)
 
         with tf.name_scope('accuracy'):
             prediction = tf.argmax(y_conv, 1)
@@ -321,41 +321,19 @@ class TadpoleConvNet:
         train_writer = tf.summary.FileWriter(graph_loc)
         train_writer.add_graph(tf.get_default_graph())
 
-        '''
-        training_dataset = tf.data.Dataset.from_tensor_slices(self.train_data)     # tuple of img_data, labels
-        # assert isinstance(training_dataset, tf.data.Dataset)
-        testing_dataset = tf.data.Dataset.from_tensor_slices(self.test_data)
-        blah = testing_dataset.batch(batch_size) 
-
-        training_batch = tf.train.batch(self.train_data, batch_size, allow_smaller_final_batch=True)
-        testing_batch = tf.train.batch(self.test_data, batch_size, allow_smaller_final_batch=True)
-        '''
-
-        # training_dataset = DataSet(self.train_data[0], self.train_data[1])
-        # training_dataset.next_batch(batch_size=batch_size)
-        # testing_dataset = DataSet(self.test_data[0], self.test_data[1])
-
-        # training_data.repeat(count=3)
-        # training_data.shuffle(...)
-
-        # training_batch = tf.train.batch(self.train_data, batch_size, allow_smaller_final_batch=True)
-        # testing_batch = tf.train.batch(self.test_data, batch_size, allow_smaller_final_batch=True)
-
-        train_img_batch, train_lbl_batch = tf.train.batch(self.train_data, batch_size=batch_size)# ,num_threads=1)
-        test_img_batch, test_lbl_batch = tf.train.batch(self.test_data, batch_size=batch_size)  # ,num_threads=1)
-
-        # train_img_batch.
+        # train_img_batch, train_lbl_batch = tf.train.batch(self.train_data, batch_size=batch_size)# ,num_threads=1)
+        # test_img_batch, test_lbl_batch = tf.train.batch(self.test_data, batch_size=batch_size)  # ,num_threads=1)
 
         training_dataset = tf.data.Dataset.from_tensor_slices(self.train_data)     # tuple of img_data, labels
         # assert isinstance(training_dataset, tf.data.Dataset)
         # iterator = training_dataset.make_one_shot_iterator()
 
-        saver = tf.train.Saver()
+        # saver = tf.train.Saver()
+        # Create a builder
+        builder = tf.saved_model.builder.SavedModelBuilder('./SavedModel/')
 
         iterator = training_dataset.make_initializable_iterator()
         next_element = iterator.get_next()
-
-        '''testing_dataset = tf.data.Dataset.from_tensor_slices(self.test_data)'''
 
         with tf.Session() as sess:
 
@@ -383,13 +361,45 @@ class TadpoleConvNet:
 
                 training_step.run(feed_dict={x_imgs: img_batch, y_lbls: labels_batch, keep_prob: 0.5})#{x_imgs: batch[0], y_lbls: batch[1], keep_prob: 0.5})
 
-            print("Shapes:", x_imgs.shape, y_lbls.shape)
+            print("imgs batch = {} \nlabels_batch = {}".format(np.array(img_batch).shape, np.array(labels_batch).shape))
 
-            print('test accuracy {}'.format(        # \/ Currently causing ValueError, are these not the right dimensions?
-                accuracy.eval(feed_dict={x_imgs: self.test_data[0], y_lbls: np.array(self.test_data[1]), keep_prob: 1.0}))
+            print("\ntrain_data[0] shape: {}\ntrain_data[1] shape: {}".format(np.array(self.train_data[0]).shape, np.array(self.train_data[1]).shape))
+            print("\ntest_data[0] shape: {}\ntest_data[1] shape: {}".format(np.array(self.test_data[0]).shape, np.array(self.test_data[1]).shape))
+
+            test_imgs = []
+            test_lbls = []
+            '''
+            for img in self.test_data[0]:
+                test_imgs.append(tf.reshape(np.array(img), shape=[None, TadpoleConvNet.IMG_SIZE, TadpoleConvNet.IMG_SIZE, TadpoleConvNet.NUM_CHANNELS]))
+
+            for lbl in self.test_data[1]:
+                test_lbls.append(tf.reshape(np.array(lbl), shape=[None, TadpoleConvNet.NUM_CLASSES]))
+            '''
+            
+            # Fix the dimensions of testing dataset to pipe through feed dict to neural net builder
+            testing_dataset = tf.data.Dataset.from_tensor_slices(self.test_data)
+            test_iterator = testing_dataset.make_initializable_iterator()
+            next_element = test_iterator.get_next()
+            sess.run(test_iterator.initializer)
+
+            for i in range(len(self.test_data[0])):
+                pair = sess.run(next_element)
+                test_imgs.append(pair[0])
+                test_lbls.append(pair[1])
+
+            print("New test shapes: {} {}".format(np.array(test_imgs).shape, np.array(test_lbls).shape))
+
+            print("\n{}".format("-"*50))
+            print('Final Test Accuracy: {:.6f}'.format(
+                accuracy.eval(feed_dict={x_imgs: test_imgs, y_lbls: test_lbls, keep_prob: 1.0}))
             )
 
-            # saver.save(sess, '/model/classifier.ckpt')
+            builder.add_meta_graph_and_variables(sess,
+                                                 [tf.saved_model.tag_constants.TRAINING],
+                                                 signature_def_map=None,        # TODO: should this be not None?
+                                                 assets_collection=None)
+        builder.save()
+        
 
     def testConvNet(self):
 
@@ -487,18 +497,21 @@ class TadpoleConvNet:
 
         print("\nClassified {} correcly out of {} --> accuracy {:.3f}".format(numb_right, total_numb, float(numb_right)/total_numb))
 
+def main(_):
+    tadconv = TadpoleConvNet()
+    tadconv.load_data("images_dataset/train", "images_dataset/test", "train_data.npy", "test_data.npy")
+    # tf.app.run(main=tadconv.main(iterations=120, batch_size=40, log_step=10))
+    tadconv.main(iterations=120, batch_size=40, log_step=10)
 
-tadconv = TadpoleConvNet()
-tadconv.load_data("images_dataset/train", "images_dataset/test", "train_data.pickle", "test_data.pickle")
-tf.app.run(main=tadconv.run(iterations=120, batch_size=40, log_step=10))
-# tadconv.testConvNet()
-# model.save("tadpole_model")
+
+if __name__ == '__main__':
+    tf.app.run(main=main)
 
 '''
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('--data_dir', type=str,
-                      default='/images_dataset/train',
+                      default='/tmp/tensorflow/mnist/input_data',
                       help='Directory for storing input data')
   FLAGS, unparsed = parser.parse_known_args()
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
