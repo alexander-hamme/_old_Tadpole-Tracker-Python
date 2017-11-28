@@ -64,7 +64,7 @@ class TadpoleConvNet:
     def __init__(self):#, img_size):
         self.train_data = []#np.array([])
         self.test_data = []#np.array([])
-        self.model_save = 'SavedModel'
+        self.model_save = 'SavedModels/SavedModel'
 
         # self.img_size = img_size                    # dimension to resize to
         # self.img_pixels = img_size**2
@@ -756,8 +756,6 @@ class TadpoleConvNet:
 
         # x = tf.placeholder(tf.float32, [None, self.IMG_PIXELS])
 
-        guesses = []
-
         # initialize first layer for input
         x_img = tf.placeholder(tf.float32, shape=[None, TadpoleConvNet.IMG_SIZE, TadpoleConvNet.IMG_SIZE, TadpoleConvNet.NUM_CHANNELS], name='x_img')  # images
         y_lbl = tf.placeholder(tf.float32, shape=[None, TadpoleConvNet.NUM_CLASSES], name='y_lbl')  # labels
@@ -887,12 +885,28 @@ class TadpoleConvNet:
 
             # for img, lbl in zip(test_imgs, test_lbls):
 
-            pred = prediction.eval(feed_dict={x_img: [test_imgs[0]], keep_prob: 1.0})
-            # pred = conv_net.eval({tf.convert_to_tensor(test_imgs[0]), tf.convert_to_tensor(test_lbls[0])})
-            print("Test classification: {}".format(pred))
+            # TODO: convnet.eval?
 
-            print(type(test_imgs[0]), test_imgs[0].shape)
-            plt.imshow(test_imgs[0][:-1])
+
+            for i in range(5):
+                idx = random.randint(0, len(test_imgs)-1)
+
+                tstimg = test_imgs[idx]
+                tstlbl = test_imgs[idx]
+
+                pred = prediction.eval(feed_dict={x_img: [tstimg], keep_prob: 1.0})
+
+                # pred = conv_net.eval({tf.convert_to_tensor(test_imgs[0]), tf.convert_to_tensor(test_lbls[0])})
+
+                print("Test classification: {}".format(pred))
+                print("Truth = {}".format(tstlbl))
+
+                assert isinstance(tstimg, np.ndarray)
+                im = plt.imshow(np.squeeze(tstimg, axis=2))
+                plt.title(
+                    ("tadpole", "ant")[pred[0]]
+                )
+                plt.show()
 
             for i in range(5, len(test_imgs), 5):
 
@@ -911,7 +925,7 @@ class TadpoleConvNet:
 
                 print("accuracy: ", sess.run(accuracy, feed_dict={x_img: imgs, y_lbl: lbls, keep_prob: 1.0}))
 
-                print("predictions: ", prediction.eval(imgs, feed_dict={x_img: imgs, keep_prob: 1.0}))     # sess.run(prediction,
+                print("predictions: ", prediction.eval(feed_dict={x_img: imgs, keep_prob: 1.0}))     # sess.run(prediction,
                 print("truths: ", lbls)
 
             print('Final Test Accuracy: {:.6f}'.format(float(sum(accuracies)) / len(accuracies)))
