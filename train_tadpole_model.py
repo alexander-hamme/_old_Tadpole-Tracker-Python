@@ -22,22 +22,6 @@ import cv2
 import sys
 import os
 
-# https://medium.com/@curiousily/tensorflow-for-hackers-part-iii-convolutional-neural-networks-c077618e590b
-
-# http://cv-tricks.com/tensorflow-tutorial/save-restore-tensorflow-models-quick-complete-tutorial/
-
-# http://cv-tricks.com/tensorflow-tutorial/training-convolutional-neural-network-for-image-classification/
-
-# https://github.com/alexander-hamme/cv-tricks.com
-
-# http://cv-tricks.com/
-
-"""Architecture of the network
-
-When designing the architecture of a neural network you have to decide on:
-How do you arrange layers? which layers to use? how many neurons to use in each layer etc.? 
-Designing the architecture is slightly complicated and advanced topic and takes a lot of research. 
-"""
 """
 TODO: Need to assemble more images of tadpoles, training image dataset is far too small
 """
