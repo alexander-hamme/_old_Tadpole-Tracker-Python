@@ -22,6 +22,22 @@ import cv2
 import sys
 import os
 
+# https://medium.com/@curiousily/tensorflow-for-hackers-part-iii-convolutional-neural-networks-c077618e590b
+
+# http://cv-tricks.com/tensorflow-tutorial/save-restore-tensorflow-models-quick-complete-tutorial/
+
+# http://cv-tricks.com/tensorflow-tutorial/training-convolutional-neural-network-for-image-classification/
+
+# https://github.com/alexander-hamme/cv-tricks.com
+
+# http://cv-tricks.com/
+
+"""Architecture of the network
+
+When designing the architecture of a neural network you have to decide on:
+How do you arrange layers? which layers to use? how many neurons to use in each layer etc.? 
+Designing the architecture is slightly complicated and advanced topic and takes a lot of research. 
+"""
 """
 TODO: Need to assemble more images of tadpoles, training image dataset is far too small
 """
@@ -39,7 +55,7 @@ class TadpoleConvNet:
     STDDEV = 0.05                                   # use normal distribution with small variance for initial values of weights
 
     VAL_SPLIT = 0.2                                 # Validation split (number of images to hold back to test on)
-    BATCH_SIZE = 16
+    BATCH_SIZE = 42
 
     NUM_CLASSES = 2
     CLASS_ONE = "tadpole"
@@ -248,7 +264,7 @@ class TadpoleConvNet:
         :param shape:
         :return:
         """
-        std_dev = 1.0 / math.sqrt(float(TadpoleConvNet.IMG_PIXELS))     # todo:  or just self.STDDEV?
+        std_dev = 1.0 / math.sqrt(float(TadpoleConvNet.IMG_PIXELS))     # todo:  or just a simple number like 0.05?
         initial = tf.truncated_normal(shape, stddev=std_dev, name=name)
         return tf.Variable(initial)
 
@@ -863,7 +879,7 @@ class TadpoleConvNet:
 
             print("New test shapes: {} {}".format(np.array(test_imgs).shape, np.array(test_lbls).shape))
 
-            print("\n{}".format("-"*50))
+            print("\n{}".format("#"*50))
 
             accuracies = []
 
@@ -872,46 +888,76 @@ class TadpoleConvNet:
             # TODO: convnet.eval?
 
 
-            for i in range(5):
-                idx = random.randint(0, len(test_imgs)-1)
+            # for i in range(5):
+            """
+            idx = random.randint(0, len(test_imgs)-1)
 
-                tstimg = test_imgs[idx]
-                tstlbl = test_imgs[idx]
+            tstimg = test_imgs[idx]
+            tstlbl = test_lbls[idx]
 
-                pred = prediction.eval(feed_dict={x_img: [tstimg], keep_prob: 1.0})
+            pred = prediction.eval(feed_dict={x_img: [tstimg], keep_prob: 1.0})
 
-                # pred = conv_net.eval({tf.convert_to_tensor(test_imgs[0]), tf.convert_to_tensor(test_lbls[0])})
+            # pred = conv_net.eval({tf.convert_to_tensor(test_imgs[0]), tf.convert_to_tensor(test_lbls[0])})
 
-                print("Test classification: {}".format(pred))
-                print("Truth = {}".format(tstlbl))
+            print("Test classification: {}".format(pred))
+            print("Truth = {}".format(tstlbl))
 
-                assert isinstance(tstimg, np.ndarray)
-                im = plt.imshow(np.squeeze(tstimg, axis=2))
-                plt.title(
-                    ("tadpole", "ant")[pred[0]]
-                )
-                plt.show()
+            assert isinstance(tstimg, np.ndarray)
+            im = plt.imshow(np.squeeze(tstimg, axis=2), cmap='gray')
+            plt.title(
+                ("tadpole", "ant")[pred[0]]
+            )
+            plt.show()
+            """
 
             for i in range(5, len(test_imgs), 5):
-
-                print("testing batch {}".format(i))
 
                 imgs = test_imgs[i-5:i]
                 lbls = test_lbls[i-5:i]
                 # t = tf.convert_to_tensor(img)
 
-                acc = accuracy.eval(feed_dict={x_img: imgs, y_lbl: lbls, keep_prob: 1.0})
+                # acc = accuracy.eval(feed_dict={x_img: imgs, y_lbl: lbls, keep_prob: 1.0})
+                # accuracies.append(acc)
+                # print("Accuracy on test batch {}: {}".format(i, ))
+
+                print("{}\nTest batch {}".format("-"*15, i/5))
+
+                preds = prediction.eval(feed_dict={x_img: imgs, keep_prob: 1.0})
+                truths = np.asarray([t[1] for t in lbls])
+
+                print("predictions: \t", preds)      # sess.run(prediction,
+                print("truths: \t\t", truths)
+
+                acc = sess.run(accuracy, feed_dict={x_img: imgs, y_lbl: lbls, keep_prob: 1.0})
                 accuracies.append(acc)
-                print("Accuracy on images: {}".format(acc))
+
+                print("accuracy: {:.3f}".format(acc))
+
+                if acc < 1.00:
+                    print("Accuracy less than 100%, displaying incorrect guesses...")
+                    for j in range(len(imgs)):
+                        tstimg = imgs[j]
+                        tstlbl = lbls[j][1]
+
+                        pred = prediction.eval(feed_dict={x_img: [tstimg], keep_prob: 1.0})[0]  # pred returns class within a list, like [1]
+
+                        if pred == tstlbl:      # Skip correct guesses
+                            continue
+
+                        # pred = conv_net.eval({tf.convert_to_tensor(test_imgs[0]), tf.convert_to_tensor(test_lbls[0])})
+
+                        # print("Test classification: {}".format(pred))
+                        # print("Truth = {}".format(tstlbl))
+
+                        assert isinstance(tstimg, np.ndarray)
+                        im = plt.imshow(np.squeeze(tstimg, axis=2), cmap='gray')
+                        plt.title(
+                            ("tadpole", "ant")[pred] + " (" + str(pred == tstlbl).lower() + ")"
+                        )
+                        plt.show()
 
 
-                print("Attempt 2:")
-
-                print("accuracy: ", sess.run(accuracy, feed_dict={x_img: imgs, y_lbl: lbls, keep_prob: 1.0}))
-
-                print("predictions: ", prediction.eval(feed_dict={x_img: imgs, keep_prob: 1.0}))     # sess.run(prediction,
-                print("truths: ", lbls)
-
+            print("-"*15)
             print('Final Test Accuracy: {:.6f}'.format(float(sum(accuracies)) / len(accuracies)))
             # accuracy.eval(feed_dict={x_imgs: test_imgs, y_lbls: test_lbls, keep_prob: 1.0}))
             # )
@@ -928,7 +974,7 @@ def main(_):
     tadconv = TadpoleConvNet()
     tadconv.load_data("images_dataset/train", "images_dataset/test", "train_data.pickle", "test_data.pickle")
     # tf.app.run(main=tadconv.main(iterations=120, batch_size=40, log_step=10))
-    tadconv.main(iterations=120, batch_size=40, log_step=10)
+    tadconv.main(iterations=120, batch_size=tadconv.BATCH_SIZE, log_step=10)
 
 # except:
 #     print("Could not load images")
