@@ -1,5 +1,5 @@
 """
-An implementation of Convolutional Neural Network using TensorFlow
+An implementation of a Convolutional Neural Network using TensorFlow
 @author: Alexander Hamme
 """
 from __future__ import print_function
