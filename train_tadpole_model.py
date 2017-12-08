@@ -3,8 +3,6 @@ An implementation of Convolutional Neural Network using TensorFlow
 @author: Alexander Hamme
 """
 from __future__ import print_function
-
-import time
 from tensorflow.python.framework.errors_impl import InvalidArgumentError, OutOfRangeError
 from tflearn.layers.core import input_data, dropout, fully_connected
 from tflearn.layers.conv import conv_2d, max_pool_2d
@@ -19,6 +17,7 @@ import tempfile
 import tflearn
 import random
 import pickle
+import time
 import math
 import cv2
 import sys
