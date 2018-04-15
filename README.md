@@ -24,7 +24,7 @@ Approaches:
 <br>
 <br>
 
-###### Detection results of my recent custom implementation of Yolo
+###### Detection results of recent custom implementation of Yolo
 
 ![Uh oh, it appears the gif didn't load. Please find it as "yolo_detections.jpg" in the images folder of this repositiory.](/images/yolo_detections.jpg?raw=true "Detection Results")
 
