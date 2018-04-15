@@ -12,7 +12,7 @@ There are two major components of this tracker program: **Detection** and **Trac
 
 Approaches:
 
-  * Detection: Convolutional neural networks will be the building block for the tadpole detection system. Currently, I am working on implementing a version of [YOLO](https://pjreddie.com/darknet/yolo/), with the backup plan being to use Single Shot Multibox Detectors (SSDs).
+  * Detection: Convolutional neural networks will be the building block for the tadpole detection system. Currently, I am working on implementing a version of [YOLO](https://pjreddie.com/darknet/yolo/), with the backup plan being to use Single Shot Multibox Detectors ([SSD](https://arxiv.org/abs/1512.02325)s).
 
   * Tracking (specifically, trajectory prediction): I will train a Long Short-Term Memory (LSTM) recurrent neural network on recorded tadpole movement data. 
 
