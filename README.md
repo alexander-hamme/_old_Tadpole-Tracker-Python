@@ -24,9 +24,9 @@ Approaches:
 <br>
 <br>
 
-###### Initial classification run on small batch of training images   (here, 100% accuracy!)
+###### Detection Results of Recent Yolo Implementation
 
-![Uh oh, it appears the gif didn't load. Please find it as "initial_test.png" in the images folder of this repositiory.](/images/yolo_detections.jpg?raw=true "Classification test")
+![Uh oh, it appears the gif didn't load. Please find it as "yolo_detections.jpg" in the images folder of this repositiory.](/images/yolo_detections.jpg "Detection Results")
 
 
 ###### More files will be added soon.
