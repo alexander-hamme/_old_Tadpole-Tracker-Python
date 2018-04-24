@@ -29,7 +29,7 @@ My most recent results were achiveing 7fps with accurate detection on tadpoles f
 
 <br>
 
-###### Detection results of recent custom implementation of Yolo
+###### Detection results of custom trained Yolo
 
 ![Uh oh, it appears the gif didn't load. Please find it as "yolo_detections.jpg" in the images folder of this repositiory.](/images/yolo_detections.jpg?raw=true "Detection Results")
 
