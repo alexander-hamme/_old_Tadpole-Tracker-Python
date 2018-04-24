@@ -16,6 +16,10 @@ Approaches:
 
   * Tracking (specifically, trajectory prediction): I will train a Long Short-Term Memory (LSTM) recurrent neural network on recorded tadpole movement data. 
 
+Current Progress:
+
+My most recent results were achiveing 7fps with accurate detection on tadpoles from a video stream, running on a GTX 1070 GPU. The next step is to try to optimize this process to hit a higher fps rate, and then hook up the tracking system to the tadpole detection bounding boxes.
+
 
 ###### Proof of Concept gif:
 
@@ -27,6 +31,5 @@ Approaches:
 ###### Detection results of recent custom implementation of Yolo
 
 ![Uh oh, it appears the gif didn't load. Please find it as "yolo_detections.jpg" in the images folder of this repositiory.](/images/yolo_detections.jpg?raw=true "Detection Results")
-
 
 ###### More files will be added soon.
