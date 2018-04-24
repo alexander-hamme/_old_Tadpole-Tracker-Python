@@ -28,7 +28,6 @@ My most recent results were achiveing 7fps with accurate detection on tadpoles f
 ![Uh oh, it appears the gif didn't load. Please find the gif in the images folder of this repositiory.](/images/proof_of_concept.gif?raw=true "Proof of Concept")
 
 <br>
-<br>
 
 ###### Detection results of recent custom implementation of Yolo
 
