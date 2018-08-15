@@ -3,7 +3,7 @@ Undergraduate Thesis project that tracks and records movement data of many *Xeno
 
 Project is in collaboration with the neuroscience department at Bard College.
 
-Program will be implemented in both Java and Python, to increase portability and allow wider access for biology researchers.
+Program will be implemented in both Java and Python, to increase portability and allow wider access for researchers in biology.
 
 -----
 
@@ -14,7 +14,7 @@ There are two major components of this tracker program: **Detection** and **Trac
 
 Approaches:
 
-  * Detection: Convolutional neural networks will be the building block for the tadpole detection system. Currently, I am embedding an implementation of a [YOLO](https://pjreddie.com/darknet/yolo/) model trained on my dataset.
+  * Detection: Convolutional neural networks will be the building block for the tadpole detection system. Currently, I am embedding an implementation of a [YOLO](https://pjreddie.com/darknet/yolov2/) model trained on my dataset.
 
   * Tracking (specifically, trajectory prediction): I will train a Long Short-Term Memory (LSTM) recurrent neural network on recorded tadpole movement data. 
 
