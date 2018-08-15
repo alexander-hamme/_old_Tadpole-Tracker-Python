@@ -1,7 +1,9 @@
 # computer-vision-xenopus-tadpole-tracker
-Research project with OpenCV and Tensorflow that tracks and records movement data of many *Xenopus laevis* tadpoles in real time. 
+Undergraduate Thesis project that tracks and records movement data of many *Xenopus laevis* tadpoles in real time. 
 
 Project is in collaboration with the neuroscience department at Bard College.
+
+Program will be implemented in both Java and Python, to increase portability and allow wider access for biology researchers.
 
 -----
 
