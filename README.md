@@ -3,7 +3,7 @@ Undergraduate Thesis project that tracks and records movement data of many *Xeno
 
 Project is in collaboration with the neuroscience department at Bard College.
 
-Program will be implemented in both Java and Python, to increase portability and allow wider access for researchers in biology.
+Program will be implemented in both Java and Python, to increase portability and allow wider access for researchers in biology. The Java code is currently private but will soon be available [here](https://github.com/alexander-hamme/Sproj-Java).
 
 -----
 
