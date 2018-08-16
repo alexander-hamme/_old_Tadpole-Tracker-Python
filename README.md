@@ -1,9 +1,7 @@
 # Tadpole-Tracker-Python
-Undergraduate Thesis project that tracks and records movement data of many *Xenopus laevis* tadpoles in real time. 
+A computational system that applies computer vision and deep learning to record and analyze movement data of many *Xenopus laevis* tadpoles in real time, for neuroscience research. This is my undergraduate thesis, and is in collaboration with the neuroscience department at Bard College.
 
-Project is in collaboration with the neuroscience department at Bard College.
-
-Program will be implemented in both Java and Python, to increase portability and allow wider access for researchers in biology. The Java code is available [here](https://github.com/alexander-hamme/Tadpole-Tracker).
+The program will be implemented in both Java and Python, to increase portability and allow wider access for researchers in biology. The Java code is available [here](https://github.com/alexander-hamme/Tadpole-Tracker).
 
 -----
 
@@ -14,7 +12,7 @@ There are two major components of this tracker program: **Detection** and **Trac
 
 Approaches:
 
-  * Detection: Convolutional neural networks will be the building block for the tadpole detection system. Currently, I am embedding an implementation of a [YOLO](https://pjreddie.com/darknet/yolov2/) model trained on my dataset.
+  * Detection: Convolutional neural networks will be the building block for the tadpole detection system. I trained deep neural networks for xenopus tadpole detection and localization using the [YOLOv2](https://pjreddie.com/darknet/yolov2/) architecture.
 
   * Tracking (specifically, trajectory prediction): I will train a Long Short-Term Memory (LSTM) recurrent neural network on recorded tadpole movement data. 
 
@@ -22,7 +20,7 @@ Approaches:
 
 Current Progress:
 
-Recently reached 15 fps with accurate detection on tadpoles from a video stream, running on a GTX 1070 GPU. The next step is to try to optimize this process to hit a higher fps rate, and then hook up the tracking system to the tadpole detection bounding boxes.
+Running inferences on each video frame with a deep neural network is very computationally expensive, on a CPU it takes ~4-5 seconds per frame. Running on a GTX 1070 GPU, I recently reached 19 fps with accurate detection on tadpoles from a video stream, which is nearly fast enough to do (accurate) real-time analysis. The next step is to try to optimize this process to hit a higher fps rate, and then implement the trajectory prediction tracking system and embed it in the system.
 
 
 ###### Proof of Concept gif:
