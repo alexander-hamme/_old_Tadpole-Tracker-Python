@@ -22,7 +22,7 @@ Approaches:
 
 Current Progress:
 
-My most recent results were achieving 7fps with accurate detection on tadpoles from a video stream, running on a GTX 1070 GPU. The next step is to try to optimize this process to hit a higher fps rate, and then hook up the tracking system to the tadpole detection bounding boxes.
+Recently reached 15 fps with accurate detection on tadpoles from a video stream, running on a GTX 1070 GPU. The next step is to try to optimize this process to hit a higher fps rate, and then hook up the tracking system to the tadpole detection bounding boxes.
 
 
 ###### Proof of Concept gif:
