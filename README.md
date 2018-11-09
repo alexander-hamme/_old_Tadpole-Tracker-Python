@@ -20,7 +20,7 @@ Approaches:
 
 Current Progress:
 
-Running inferences on each video frame with a deep neural network is very computationally expensive, on a CPU it takes ~4-5 seconds per frame. Running on a GTX 1070 GPU, I recently reached 19 fps with accurate detection on tadpoles from a video stream, which is nearly fast enough to do (accurate) real-time analysis. The next step is to try to optimize this process to hit a higher fps rate, and then implement the trajectory prediction tracking system and embed it in the system.
+Running inferences on each video frame with a deep neural network is very computationally expensive, on a CPU it takes ~4-5 seconds per frame. Running on a GTX 1070 GPU allow 19 fps with accurate detection on tadpoles from a video stream, which is nearly fast enough to do (accurate) real-time analysis. The next step is to try to optimize this process to hit a higher fps rate, and then implement the trajectory prediction tracking system and embed it in the system.
 
 
 ###### Proof of Concept gif:
