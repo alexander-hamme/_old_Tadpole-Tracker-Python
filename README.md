@@ -1,7 +1,11 @@
 # Tadpole-Tracker-Python
 A computational system that applies computer vision and deep learning to record and analyze movement data of many *Xenopus laevis* tadpoles in real time, for neuroscience research. This is my undergraduate thesis, in collaboration with the neuroscience department at Bard College.
 
-The program will be implemented in both Java and Python, to increase portability (i.e. standalone executable JAR files) and allow wider access for biology researchers to use in the future. The Java code is available [here](https://github.com/alexander-hamme/Tadpole-Tracker).
+The full tracking system is written in Java, available [here](https://github.com/alexander-hamme/Tadpole-Tracker).
+
+I may eventually translate the code to Python, to create wider access for fellow hackers and biology researchers to use for their own projects / research in the future. However, the Python code is much slower than Java. Even with a good GPU it is barely fast enough for real-time tracking.
+
+Right now I'm working on translating it to C++ to run speed benchmarks against the Java code. That code is in [this repository](https://github.com/alexander-hamme/Tadpole-Tracker-Cpp).
 
 -----
 
@@ -14,7 +18,7 @@ Approaches:
 
   * Detection: Convolutional neural networks will be the building block for the tadpole detection system. I trained deep neural networks for xenopus tadpole detection and localization using the [YOLOv2](https://pjreddie.com/darknet/yolov2/) architecture.
 
-  * Tracking (specifically, trajectory prediction): I will train a Long Short-Term Memory (LSTM) recurrent neural network on recorded tadpole movement data. 
+  * Tracking: I have implemented linear Kalman filters for trajectory estimation, and a modified version of the Munkres Hungarian optimal assignment algorithm for maintaining unique object identities across frames.
 
 -----
 
