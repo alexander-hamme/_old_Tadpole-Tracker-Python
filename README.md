@@ -3,7 +3,7 @@ A computational system that applies computer vision and deep learning to record 
 
 The full tracking system is written in Java, available [here](https://github.com/alexander-hamme/Tadpole-Tracker).
 
-I may eventually translate the code to Python, to create wider access for fellow hackers and biology researchers to use for their own projects / research in the future. However, the Python code is much slower than Java. Even with a good GPU it is barely fast enough for real-time tracking.
+I may eventually translate the code to Python, to create wider access for fellow hackers and biology researchers to use for their own projects / research in the future. However, the Python code is much slower than Java. Even with a good GPU it is barely fast enough for real-time tracking (on a GTX 1070 GPU the Yolo network inference runs at 19 fps).
 
 Right now I'm working on translating it to C++ to run speed benchmarks against the Java code. That code is in [this repository](https://github.com/alexander-hamme/Tadpole-Tracker-Cpp).
 
@@ -21,10 +21,6 @@ Approaches:
   * Tracking: I have implemented linear Kalman filters for trajectory estimation, and a modified version of the Munkres Hungarian optimal assignment algorithm for maintaining unique object identities across frames.
 
 -----
-
-Current Progress:
-
-Running inferences on each video frame with a deep neural network is very computationally expensive, on a CPU it takes ~4-5 seconds per frame. Running on a GTX 1070 GPU allow 19 fps with accurate detection on tadpoles from a video stream, which is nearly fast enough to do (accurate) real-time analysis. The next step is to try to optimize this process to hit a higher fps rate, and then implement the trajectory prediction tracking system and embed it in the system.
 
 
 ###### Proof of Concept gif:
